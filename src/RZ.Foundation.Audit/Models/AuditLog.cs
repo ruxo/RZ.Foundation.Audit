@@ -86,7 +86,7 @@ public sealed record AuditLog : IHaveValidator<AuditLog>, IHaveKey<Guid>
 }
 
 [PublicAPI]
-public readonly record struct Actor(string UserId, ClientType Type, string Ip, string[]? Roles = null) : IHaveValidator<Actor>
+public readonly record struct Actor(string UserId, string Channel, string? Ip = null, string[]? Roles = null) : IHaveValidator<Actor>
 {
     public static IValidator<Actor> Validator { get; } = new ValidatorType();
 
@@ -94,21 +94,29 @@ public readonly record struct Actor(string UserId, ClientType Type, string Ip, s
     {
         public ValidatorType() {
             RuleFor(x => x.UserId).NotEmpty();
-            RuleFor(x => x.Type).IsInEnum();
+            RuleFor(x => x.Channel).NotEmpty();
             RuleFor(x => x.Ip).NotEmpty()
                               .Must(ip => IPAddress.TryParse(ip, out _)).WithErrorCode(StandardErrorCodes.InvalidRequest).WithMessage("Incorrect IP Address format.");
         }
     }
 }
 
+/// <summary>
+/// Channel is a string that indicates the source of the request.
+/// </summary>
 [PublicAPI]
-public enum ClientType
+public static class Channels
 {
-    Browser,
-    Mobile,
-    Desktop,
-    Service,
-    Other
+    public const string Browser = "browser";
+    public const string Mobile = "mobile";
+    public const string Android = "android";
+    public const string Apple = "ios";
+    public const string Desktop = "desktop";
+    public const string Facebook = "facebook";
+    public const string Telegram = "telegram";
+    public const string WhatsApp = "whatsapp";
+    public const string Email = "email";
+    public const string LINE = "line";
 }
 
 /// <summary>
