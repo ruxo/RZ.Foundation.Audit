@@ -86,7 +86,7 @@ public sealed record AuditLog : IHaveValidator<AuditLog>, IHaveKey<Guid>
 }
 
 [PublicAPI]
-public readonly record struct Actor(string UserId, string Channel, string? Ip = null, string[]? Roles = null) : IHaveValidator<Actor>
+public readonly record struct Actor(string UserId, string Channel, string? UserName = null, string? Ip = null, string[]? Roles = null) : IHaveValidator<Actor>
 {
     public static IValidator<Actor> Validator { get; } = new ValidatorType();
 
