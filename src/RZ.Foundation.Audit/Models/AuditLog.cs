@@ -95,8 +95,7 @@ public readonly record struct Actor(string UserId, string Channel, string? UserN
         public ValidatorType() {
             RuleFor(x => x.UserId).NotEmpty();
             RuleFor(x => x.Channel).NotEmpty();
-            RuleFor(x => x.Ip).NotEmpty()
-                              .Must(ip => IPAddress.TryParse(ip, out _)).WithErrorCode(StandardErrorCodes.InvalidRequest).WithMessage("Incorrect IP Address format.");
+            RuleFor(x => x.Ip).Must(ip => ip is null || IPAddress.TryParse(ip, out _)).WithErrorCode(StandardErrorCodes.InvalidRequest).WithMessage("Incorrect IP Address format.");
         }
     }
 }

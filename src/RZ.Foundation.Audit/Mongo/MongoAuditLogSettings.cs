@@ -7,7 +7,7 @@ namespace RZ.Foundation.Audit.Mongo;
 public static class MongoAuditLogSettings
 {
     public static IServiceCollection AddMongoAuditLog(this IServiceCollection services)
-        => services.AddSingleton<IAuditLog, MongoAuditLog>()
+        => services.AddScoped<IAuditLog, MongoAuditLog>()
                    .AddSingleton<AuditLogDispatcher>()
                    .AddScoped<MongoAuditLogDbContext>()
                    .AddScoped<IAuditLogDispatcher, MongoLogDispatcher>();
