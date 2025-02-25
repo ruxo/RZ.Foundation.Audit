@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System.Runtime.CompilerServices;
+using MongoDB.Driver;
 using RZ.Foundation.Audit.Models;
 using RZ.Foundation.Types;
 using RZ.Foundation.Validation;
@@ -10,25 +11,36 @@ class MongoAuditLog(MongoAuditLogDbContext db, AuditLogDispatcher dispatcher) : 
     public void Log(AuditLog log)
         => dispatcher.Dispatch(log.Validate());
 
-    public async Task<IReadOnlyList<AuditLog>> SearchLogs(DateRange period, string service, string key, string value) {
-        ValidatePeriod(period);
-        return await db.GetCollection<AuditLog>()
-                       .Find(x => x.Service == service &&
-                                  x.Indexes!.Any(i => i.Key == key && i.Value == value) &&
-                                  x.Timestamp >= period.Begin && x.Timestamp < period.End)
-                       .ToListAsync();
-    }
-    public async Task<IReadOnlyList<AuditLog>> SearchLogs(DateRange period, string service, string action) {
-        ValidatePeriod(period);
-        return await db.GetCollection<AuditLog>().Find(x => x.Service == service && x.Action == action && x.Timestamp >= period.Begin && x.Timestamp < period.End).ToListAsync();
-    }
-    public async Task<IReadOnlyList<AuditLog>> SearchLogs(DateRange period, string service) {
-        ValidatePeriod(period);
-        return await db.GetCollection<AuditLog>().Find(x => x.Service == service && x.Timestamp >= period.Begin && x.Timestamp < period.End).ToListAsync();
+    public IAsyncEnumerable<AuditLog> SearchLogs(DateRange period, string service, string key, string value, CancellationToken cancelToken = default) {
+        var b = Builders<AuditLog>.Filter;
+        var exp = b.And(b.Eq(x => x.Service, service), b.Eq("Indexes.Key", key), b.Eq("Indexes.Value", value));
+        return Query(exp, period, cancelToken);
     }
 
-    static void ValidatePeriod(DateRange period) {
-        if (period.Begin is null || period.End is null)
-            throw new ErrorInfoException(StandardErrorCodes.InvalidRequest, "Period's begin/end cannot be required");
+    public IAsyncEnumerable<AuditLog> SearchLogs(DateRange period, string service, string action, CancellationToken cancelToken = default) {
+        var b = Builders<AuditLog>.Filter;
+        var exp = b.And(b.Eq(x => x.Service, service), b.Eq(x => x.Action, action));
+        return Query(exp, period, cancelToken);
+    }
+
+    public IAsyncEnumerable<AuditLog> SearchLogs(DateRange period, string service, CancellationToken cancelToken = default) {
+        var exp = Builders<AuditLog>.Filter.Eq(x => x.Service, service);
+        return Query(exp, period, cancelToken);
+    }
+
+    IAsyncEnumerable<AuditLog> Query(FilterDefinition<AuditLog> exp, DateRange period, CancellationToken cancelToken) {
+        var b = Builders<AuditLog>.Filter;
+        if (period.Begin is not null)
+            exp = b.And(exp, b.Gte(x => x.Timestamp, period.Begin!.Value));
+        if (period.End is not null)
+            exp = b.And(exp, b.Lt(x => x.Timestamp, period.End!.Value));
+        return Query(exp, cancelToken);
+    }
+
+    async IAsyncEnumerable<AuditLog> Query(FilterDefinition<AuditLog> exp, [EnumeratorCancellation] CancellationToken cancelToken = default) {
+        var cursor = await db.GetCollection<AuditLog>().FindAsync(exp, cancellationToken: cancelToken);
+        while (await cursor.MoveNextAsync(cancelToken))
+            foreach (var log in cursor.Current)
+                yield return log;
     }
 }

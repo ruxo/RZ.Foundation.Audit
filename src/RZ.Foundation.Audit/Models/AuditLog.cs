@@ -133,4 +133,7 @@ public static class Channels
 /// </param>
 /// <param name="Value">Index value name</param>
 [PublicAPI]
-public readonly record struct IndexInfo(string Key, string Value);
+public readonly record struct IndexInfo(string Key, string Value)
+{
+    public static implicit operator IndexInfo((string Key, string Value) tuple) => new(tuple.Key, tuple.Value);
+}
