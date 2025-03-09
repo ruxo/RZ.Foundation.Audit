@@ -39,7 +39,7 @@ class MongoAuditLog(MongoAuditLogDbContext db, AuditLogDispatcher dispatcher) : 
 
     async IAsyncEnumerable<AuditLog> Query(FilterDefinition<AuditLog> exp, [EnumeratorCancellation] CancellationToken cancelToken = default) {
         var cursor = await db.GetCollection<AuditLog>().FindAsync(exp, cancellationToken: cancelToken);
-        while (await cursor.MoveNextAsync(cancelToken))
+        while (!cancelToken.IsCancellationRequested && await cursor.MoveNextAsync(cancelToken))
             foreach (var log in cursor.Current)
                 yield return log;
     }
