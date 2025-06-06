@@ -11,7 +11,7 @@ public interface IAuditLogDispatcher
     Task Dispatch(AuditLog log);
 }
 
-sealed class AuditLogDispatcher(ActorSystem system, IAuditLogDispatcher dispatcher)
+public sealed class AuditLogDispatcher(ActorSystem system, IAuditLogDispatcher dispatcher)
 {
     readonly IActorRef dispatcherRef = system.CreateActor<Dispatcher>("audit-log-dispatcher", dispatcher);
 

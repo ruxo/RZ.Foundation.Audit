@@ -5,7 +5,7 @@ using RZ.Foundation.MongoDb;
 
 namespace RZ.Foundation.Audit.Mongo;
 
-class MongoAuditLogDbContext(ILogger<MongoAuditLogDbContext> logger, IConfiguration configuration)
+public class MongoAuditLogDbContext(ILogger<MongoAuditLogDbContext> logger, IConfiguration configuration)
     : RzMongoDbContext(configuration.GetConnectionString("AuditLog") ?? NoConfig(logger))
 {
     [DoesNotReturn]

@@ -6,7 +6,7 @@ using RZ.Foundation.Validation;
 
 namespace RZ.Foundation.Audit.Mongo;
 
-class MongoAuditLog(MongoAuditLogDbContext db, AuditLogDispatcher dispatcher) : IAuditLog
+public class MongoAuditLog(MongoAuditLogDbContext db, AuditLogDispatcher dispatcher) : IAuditLog
 {
     public void Log(AuditLog log)
         => dispatcher.Dispatch(log.Validate());
