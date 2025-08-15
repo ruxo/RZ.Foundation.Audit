@@ -20,8 +20,10 @@ public static class Migrations
                              .Descending(m => m.Timestamp))
                 .Index("ix_action", b => b.Ascending(m => m.Service).Ascending(m => m.Action).Descending(m => m.Timestamp))
                 .Index("ix_timeline", b => b.Ascending(m => m.Service).Descending(m => m.Timestamp))
+                .Index("ix_trace", b => b.Ascending(m => m.TraceId).Descending(m => m.Timestamp).Ascending(m => m.Service).Ascending(m => m.Action))
                 .Run(session);
     }
+
     public static void Down(IMongoDatabase database, IClientSessionHandle session) {
         database.DropCollection(session, nameof(AuditLog));
     }
