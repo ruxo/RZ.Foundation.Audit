@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
@@ -12,9 +12,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RZ.Foundation.Akka" Version="0.1.4" />
-    <PackageReference Include="RZ.Foundation.MongoDb.Migration" Version="7.0.2" />
-    <PackageReference Include="RZ.Foundation.Validation" Version="0.1.0" />
+    <PackageReference Include="RZ.Foundation.Akka" Version="0.2.0" />
+    <PackageReference Include="RZ.Foundation.MongoDb.Migration" Version="7.1.0" />
+    <PackageReference Include="RZ.Foundation.Validation" Version="0.2.0" />
   </ItemGroup>
 
 </Project>
