@@ -1,8 +1,10 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
+    <File Path="build.ps1" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src\RZ.Foundation.Audit\RZ.Foundation.Audit.csproj" Type="Classic C#" />
+    <Project Path="src/RZ.Foundation.Audit.Migration/RZ.Foundation.Audit.Migration.csproj" />
+    <Project Path="src\RZ.Foundation.Audit\RZ.Foundation.Audit.csproj" />
   </Folder>
 </Solution>

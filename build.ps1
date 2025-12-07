@@ -15,5 +15,6 @@ function build {
 Push-Location ./src
 
 build .\RZ.Foundation.Audit
+build .\RZ.Foundation.Audit.Migration
 
 Pop-Location
