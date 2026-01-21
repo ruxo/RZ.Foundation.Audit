@@ -8,7 +8,7 @@ namespace RZ.Foundation.Audit;
 
 public interface IAuditLogDispatcher
 {
-    Task Dispatch(AuditLog log);
+    ValueTask<Outcome<Unit>> Dispatch(AuditLog log);
 }
 
 public sealed class AuditLogDispatcher(ActorSystem system, IAuditLogDispatcher dispatcher)
@@ -25,12 +25,8 @@ public sealed class AuditLogDispatcher(ActorSystem system, IAuditLogDispatcher d
             switch (message){
                 case AuditLog log:
                     RunTask(async () => {
-                        try{
-                            await dispatcher.Dispatch(log);
-                        }
-                        catch (Exception e){
-                            logger.LogError(e, "Audit log failed. It is lost: {Log}", log);
-                        }
+                        if (Fail(await dispatcher.Dispatch(log), out var e))
+                            logger.LogError("Audit log failed. It is lost: {Log}, Error: {@Error}", log, e);
                     });
                     break;
                 default:

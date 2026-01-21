@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MinVer" Version="6.0.0">
+    <PackageReference Include="MinVer" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RZ.Foundation.MongoDb.Migration" Version="7.1.0" />
+    <PackageReference Include="RZ.Foundation.MongoDb.Migration" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>

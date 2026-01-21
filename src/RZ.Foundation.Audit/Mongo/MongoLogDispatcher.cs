@@ -5,6 +5,6 @@ namespace RZ.Foundation.Audit.Mongo;
 
 public class MongoLogDispatcher(MongoAuditLogDbContext db) : IAuditLogDispatcher
 {
-    public Task Dispatch(AuditLog log)
-        => db.GetCollection<AuditLog>().Add(log);
+    public async ValueTask<Outcome<Unit>> Dispatch(AuditLog log)
+        => (await db.GetCollection<AuditLog>().Add(log)).Map(_ => unit);
 }
