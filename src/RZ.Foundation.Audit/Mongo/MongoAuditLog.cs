@@ -44,7 +44,7 @@ public class MongoAuditLog(ILogger<MongoAuditLog> logger, MongoAuditLogDbContext
     }
 
     async IAsyncEnumerable<Outcome<AuditLog>> Query(FilterDefinition<AuditLog> exp, [EnumeratorCancellation] CancellationToken cancelToken = default) {
-        if (Fail(await TryCatch(db.GetCollection<AuditLog>().FindAsync(exp, cancellationToken: cancelToken)), out var e, out var cursor)){
+        if (Fail(await TryCatch(db.GetCollection<AuditLog>().FindAsync(exp, cancellationToken: cancelToken)).ConfigureAwait(false), out var e, out var cursor)){
             yield return e;
             yield break;
         }

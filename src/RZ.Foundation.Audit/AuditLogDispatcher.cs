@@ -25,7 +25,7 @@ public sealed class AuditLogDispatcher(ActorSystem system, IAuditLogDispatcher d
             switch (message){
                 case AuditLog log:
                     RunTask(async () => {
-                        if (Fail(await dispatcher.Dispatch(log), out var e))
+                        if (Fail(await dispatcher.Dispatch(log).ConfigureAwait(false), out var e))
                             logger.LogError("Audit log failed. It is lost: {Log}, Error: {@Error}", log, e);
                     });
                     break;
