@@ -13,9 +13,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RZ.Foundation.Akka" Version="0.2.2" />
+    <PackageReference Include="RZ.Foundation.Akka" Version="0.3.0" />
     <PackageReference Include="RZ.Foundation.MongoDb" Version="8.0.8" />
-    <PackageReference Include="RZ.Foundation.Validation" Version="0.2.4" />
+    <PackageReference Include="RZ.Foundation.Validation" Version="0.3.0" />
   </ItemGroup>
 
 </Project>
